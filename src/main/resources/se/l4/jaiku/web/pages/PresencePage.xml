@@ -70,7 +70,7 @@
 <body>
 	<div class="stream">
 		<div class="presence">
-			<img src="${presence.user.avatar}" class="avatar" width="50" height="50" />
+			<img src="/avatar/${presence.user.nick}" class="avatar" width="50" height="50" />
 			<span class="said">${presence.user.nick} said:</span>
 			<span class="content">
 				${presence.title}
@@ -84,7 +84,7 @@
 		<div class="comments">
 			<d:loop source="${presence.comments}" value="${comment}">
 				<div class="comment">
-					<img src="${comment.user.avatar}" class="avatar" width="50" height="50" />
+					<img src="/avatar/${comment.user.nick}" class="avatar" width="50" height="50" />
 					<d:raw value="${comment.prettyContent}" />
 					
 					<div class="metadata">
