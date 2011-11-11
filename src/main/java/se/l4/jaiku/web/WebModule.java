@@ -3,6 +3,8 @@ package se.l4.jaiku.web;
 import java.io.File;
 
 import org.eclipse.jetty.servlets.GzipFilter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import se.l4.crayon.CrayonModule;
 import se.l4.crayon.annotation.Contribution;
@@ -19,12 +21,14 @@ import com.google.inject.Stage;
 /**
  * Module that binds up the web based user interface.
  * 
- * @author andreas
+ * @author Andreas Holstenson
  *
  */
 public class WebModule
 	extends CrayonModule
 {
+	private static final Logger logger = LoggerFactory.getLogger(WebModule.class);
+	
 	public static final String NAMESPACE = "jaiku";
 	
 	@Override
@@ -34,9 +38,23 @@ public class WebModule
 	
 	@Provides
 	@Singleton
-	public Storage provideStorage()
+	public Gson provideGson()
 	{
-		return new DiskStorage(new File("jaiku-archive"), new Gson());
+		return new Gson();
+	}
+	
+	@Provides
+	@Singleton
+	public Storage provideStorage(Gson gson)
+	{
+		File file = new File("/var/jaikuarchive");
+		if(! file.exists() || ! file.canWrite())
+		{
+			logger.warn("Can not write to " + file.getAbsolutePath() + ", using current folder");
+			file = new File("jaikuarchive");
+		}
+		
+		return new DiskStorage(file, gson);
 	}
 	
 	@Contribution(name="tinder-ns")

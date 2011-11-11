@@ -58,7 +58,6 @@ public class JaikuUserStream
 	public UserStream fetch(UserStream output, long offset)
 		throws IOException
 	{
-		System.out.println("Fetching with " + offset);
 		String uri = "http://" + user + ".jaiku.com/json" + (offset != 0 ? "?offset=" + offset + ".0" : "");
 		URL url = new URL(uri);
 		

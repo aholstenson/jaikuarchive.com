@@ -7,6 +7,7 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.net.URL;
 
+import se.l4.jaiku.model.Comment;
 import se.l4.jaiku.model.Presence;
 
 import com.google.gson.Gson;
@@ -64,7 +65,21 @@ public class JaikuPresenceFetcher
 			JsonReader jsonReader = new JsonReader(reader);
 			jsonReader.setLenient(true);
 			
-			return gson.fromJson(jsonReader, Presence.class);
+			Presence presence = gson.fromJson(jsonReader, Presence.class);
+			for(Comment c : presence.getComments())
+			{
+				if(c.getContent() != null)
+				{
+					c.setContent(TextUpdater.updateLinks(c.getContent()));
+				}
+				
+				if(c.getPrettyContent() != null)
+				{
+					c.setPrettyContent(TextUpdater.updateLinks(c.getPrettyContent()));
+				}
+			}
+			
+			return presence;
 		}
 		finally
 		{

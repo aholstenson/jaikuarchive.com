@@ -4,6 +4,12 @@ import se.l4.crayon.Configurator;
 import se.l4.dust.jaxrs.AppBootstrap;
 import se.l4.dust.jaxrs.resteasy.ResteasyModule;
 
+/**
+ * Boostrap (servlet listener) that makes sure Dust can find our web parts.
+ * 
+ * @author Andreas Holstenson
+ *
+ */
 public class JaikuBootstrap
 	extends AppBootstrap
 {

@@ -52,22 +52,47 @@
 			
 			clear: both;
 		}
+		
+		.metadata {
+			margin-top: 10px;
+			
+			font-size: 0.9em;
+			color: #ccc;
+		}
+		
+		.comment p {
+			margin-top: 0;
+			padding :0;
+			margin-bottom: 1em;
+		}
 	</style>
 </head>
 <body>
 	<div class="stream">
 		<div class="presence">
-			<img src="${presence.user.avatar}" class="avatar" />
+			<img src="${presence.user.avatar}" class="avatar" width="50" height="50" />
 			<span class="said">${presence.user.nick} said:</span>
 			<span class="content">
 				${presence.title}
 			</span>
+			<div class="metadata">
+				<span class="time" title="${presence.createdAtDate.toString('yyyy-MM-dd HH:mm')}">
+					${getRelativeTime(presence.createdAtDate)} ago
+				</span>
+			</div>
 		</div>
 		<div class="comments">
 			<d:loop source="${presence.comments}" value="${comment}">
 				<div class="comment">
-					<img src="${comment.user.avatar}" class="avatar" />
-					${comment.user.nick}: <br/>${comment.content}
+					<img src="${comment.user.avatar}" class="avatar" width="50" height="50" />
+					<d:raw value="${comment.prettyContent}" />
+					
+					<div class="metadata">
+						<span class="time" title="${comment.createdAtDate.toString('yyyy-MM-dd HH:mm')}">
+							${getRelativeTime(comment.createdAtDate)} ago
+						</span>
+						by ${comment.user.nick}
+					</div>
 				</div>
 			</d:loop>
 		</div>

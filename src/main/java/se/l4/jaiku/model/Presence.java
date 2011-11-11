@@ -2,6 +2,8 @@ package se.l4.jaiku.model;
 
 import java.util.List;
 
+import org.joda.time.DateTime;
+
 /**
  * Presence feed.
  * 
@@ -53,6 +55,11 @@ public class Presence
 	public String getCreatedAt()
 	{
 		return created_at;
+	}
+	
+	public DateTime getCreatedAtDate()
+	{
+		return Comment.formatter.parseDateTime(created_at);
 	}
 	
 	public User getUser()

@@ -38,6 +38,21 @@ public class Comment
 	{
 		return content;
 	}
+
+	public void setContent(String content)
+	{
+		this.content = content;
+	}
+	
+	public String getPrettyContent()
+	{
+		return pretty_content;
+	}
+	
+	public void setPrettyContent(String pretty_content)
+	{
+		this.pretty_content = pretty_content;
+	}
 	
 	public String getUrl()
 	{
@@ -60,7 +75,7 @@ public class Comment
 	}
 	
 	// 2010-01-27T09-17-26Z
-	static DateTimeFormatter formatter = new DateTimeFormatterBuilder()
+	public static DateTimeFormatter formatter = new DateTimeFormatterBuilder()
 		.appendPattern("yyyy-MM-dd'T'HH-mm-ss'Z'")
 		.toFormatter();
 }
