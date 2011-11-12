@@ -38,6 +38,7 @@ public class DiskStorage
 	
 	private File getPresencePath(String username, String id)
 	{
+		username = username.toLowerCase();
 		String u1 = username.length() > 2 ? username.substring(0, 2) : username;
 		
 		String p1 = id.length() > 2 ? id.substring(0, 2) : id;
