@@ -89,6 +89,6 @@ public class PresencePage
 	
 	public String user(User user)
 	{
-		return "http://" + user.getNick() + "." + JaikuConstants.ARCHIVE_URL;
+		return "http://" + user.getNick().toLowerCase() + "." + JaikuConstants.ARCHIVE_URL;
 	}
 }

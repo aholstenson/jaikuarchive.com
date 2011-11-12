@@ -101,6 +101,7 @@ public class DiskStorage
 	
 	private File getAvatarPath(String username)
 	{
+		username = username.toLowerCase();
 		String u1 = username.length() > 2 ? username.substring(0, 2) : username;
 		
 		File root = new File(directory, "avatars");
@@ -142,6 +143,7 @@ public class DiskStorage
 	
 	private File getUserPath(String username)
 	{
+		username = username.toLowerCase();
 		String u1 = username.length() > 2 ? username.substring(0, 2) : username;
 		
 		File root = new File(directory, "users");
