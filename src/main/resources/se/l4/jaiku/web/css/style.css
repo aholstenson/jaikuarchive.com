@@ -1,0 +1,62 @@
+body {
+	font-family: Arial, Helvetica, sans-serif;
+}
+
+.stream {
+	margin-left: auto;
+	margin-right: auto;
+	width: 600px;
+}
+
+.avatar {
+	float: left;
+}
+
+.presence {
+	font-size: 24px;
+	margin-left: 60px;
+}
+
+.presence img, .comment img {
+	margin-left: -60px;
+}
+
+.presence .said {
+	display: block;
+	color: #666;
+}
+
+.comments {
+	background: #f0f0f0;
+	border: 1px solid #eee;
+	
+	margin-top: 20px;
+	
+	clear: both;
+}
+
+.comment {
+	background: #fafafa;
+	
+	margin: 10px;
+	margin-bottom: 20px;
+	
+	padding: 5px;
+	padding-left: 70px;
+	
+	
+	clear: both;
+}
+
+.metadata {
+	margin-top: 10px;
+	
+	font-size: 0.9em;
+	color: #ccc;
+}
+
+.comment p {
+	margin-top: 0;
+	padding :0;
+	margin-bottom: 1em;
+}

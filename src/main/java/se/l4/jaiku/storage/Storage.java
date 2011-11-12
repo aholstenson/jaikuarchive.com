@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.InputStream;
 
 import se.l4.jaiku.model.Presence;
+import se.l4.jaiku.model.User;
 
 /**
  * Simple abstraction for the Jaiku storage.
@@ -57,5 +58,24 @@ public interface Storage
 	 * @throws IOException
 	 */
 	void saveAvatar(String username, InputStream stream)
+		throws IOException;
+	
+	/**
+	 * Get information about a specific user.
+	 * 
+	 * @param username
+	 * @return
+	 * @throws IOException
+	 */
+	User getUser(String username)
+		throws IOException;
+	
+	/**
+	 * Save information about a user (if it does not exist).
+	 * 
+	 * @param user
+	 * @throws IOException
+	 */
+	void saveUser(User user)
 		throws IOException;
 }

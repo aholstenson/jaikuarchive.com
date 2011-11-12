@@ -1,0 +1,10 @@
+<!DOCTYPE html>
+<html xmlns:d="dust:common" xmlns:ja="jaikuarchive">
+<head>
+	<title>${title} | Jaiku Archive</title>
+	<link href="${asset:ja:css/style.css}" rel="stylesheet" type="text/css" />
+</head>
+<body>
+	<d:body />
+</body>
+</html>

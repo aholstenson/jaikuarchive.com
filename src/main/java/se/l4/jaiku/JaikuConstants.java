@@ -13,6 +13,8 @@ public class JaikuConstants
 	 */
 	public static final String ARCHIVE_URL = "jaikuarchive.com";
 	
+	public static final String ARCHIVE_URL_NO_COM = "jaikuarchive";
+	
 	/**
 	 * URL of Jaiku.
 	 */

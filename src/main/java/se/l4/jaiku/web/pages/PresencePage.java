@@ -16,6 +16,7 @@ import se.l4.dust.api.annotation.Template;
 import se.l4.jaiku.TimeFormatting;
 import se.l4.jaiku.model.Comment;
 import se.l4.jaiku.model.Presence;
+import se.l4.jaiku.model.User;
 import se.l4.jaiku.robot.JaikuAvatarFetcher;
 import se.l4.jaiku.robot.JaikuPresenceFetcher;
 import se.l4.jaiku.storage.Storage;
@@ -104,5 +105,10 @@ public class PresencePage
 		Period period = interval.toPeriod();
 		
 		return period.toString(TimeFormatting.YEARS_AND_MONTHS);
+	}
+	
+	public String avatar(User user)
+	{
+		return AvatarsPage.avatar(user);
 	}
 }

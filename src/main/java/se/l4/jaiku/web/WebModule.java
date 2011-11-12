@@ -9,6 +9,7 @@ import org.slf4j.LoggerFactory;
 import se.l4.crayon.CrayonModule;
 import se.l4.crayon.annotation.Contribution;
 import se.l4.dust.api.NamespaceManager;
+import se.l4.dust.api.annotation.NamespaceBinding;
 import se.l4.dust.jaxrs.ServletBinder;
 import se.l4.jaiku.storage.DiskStorage;
 import se.l4.jaiku.storage.Storage;
@@ -29,7 +30,7 @@ public class WebModule
 {
 	private static final Logger logger = LoggerFactory.getLogger(WebModule.class);
 	
-	public static final String NAMESPACE = "jaiku";
+	public static final String NAMESPACE = "jaikuarchive";
 	
 	@Override
 	protected void configure()
@@ -57,12 +58,13 @@ public class WebModule
 		return new DiskStorage(file, gson);
 	}
 	
-	@Contribution(name="tinder-ns")
+	@NamespaceBinding
 	public void contributeNamespace(NamespaceManager manager)
 	{
 		manager.bind(NAMESPACE)
 			.setPrefix("jaiku")
 			.setPackageFromClass(getClass())
+			.setVersion("1") // XXX: Update if assets have changed
 			.add();
 	}
 	

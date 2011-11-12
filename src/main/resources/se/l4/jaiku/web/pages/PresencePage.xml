@@ -1,76 +1,9 @@
-<!DOCTYPE html>
-<html xmlns:d="dust:common">
-<head>
-	<title>${presence.title} - ${presence.user.nick} | Jaiku Archive</title>
-	<style>
-		body {
-			font-family: Arial, Helvetica, sans-serif;
-		}
-		
-		.stream {
-			margin-left: auto;
-			margin-right: auto;
-			width: 600px;
-		}
-		
-		.avatar {
-			float: left;
-		}
-		
-		.presence {
-			font-size: 24px;
-			margin-left: 60px;
-		}
-		
-		.presence img, .comment img {
-			margin-left: -60px;
-		}
-		
-		.presence .said {
-			display: block;
-			color: #666;
-		}
-		
-		.comments {
-			background: #f0f0f0;
-			border: 1px solid #eee;
-			
-			margin-top: 20px;
-			
-			clear: both;
-		}
-		
-		.comment {
-			background: #fafafa;
-			
-			margin: 10px;
-			margin-bottom: 20px;
-			
-			padding: 5px;
-			padding-left: 70px;
-			
-			
-			clear: both;
-		}
-		
-		.metadata {
-			margin-top: 10px;
-			
-			font-size: 0.9em;
-			color: #ccc;
-		}
-		
-		.comment p {
-			margin-top: 0;
-			padding :0;
-			margin-bottom: 1em;
-		}
-	</style>
-</head>
-<body>
+<ja:layout xmlns:ja="jaikuarchive" xmlns:d="dust:common"
+	title="${presence.title}">
+	
 	<div class="stream">
 		<div class="presence">
-			<img src="/avatar/${presence.user.nick}" class="avatar" width="50" height="50" />
+			<img src="${avatar(presence.user)}" class="avatar" width="50" height="50" />
 			<span class="said">${presence.user.nick} said:</span>
 			<span class="content">
 				${presence.title}
@@ -84,7 +17,7 @@
 		<div class="comments">
 			<d:loop source="${presence.comments}" value="${comment}">
 				<div class="comment">
-					<img src="/avatar/${comment.user.nick}" class="avatar" width="50" height="50" />
+					<img src="${avatar(comment.user)}" class="avatar" width="50" height="50" />
 					<d:raw value="${comment.prettyContent}" />
 					
 					<div class="metadata">
@@ -97,5 +30,5 @@
 			</d:loop>
 		</div>
 	</div>
-</body>
-</html>
+	
+</ja:layout>

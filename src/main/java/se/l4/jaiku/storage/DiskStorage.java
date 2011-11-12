@@ -8,7 +8,9 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 
+import se.l4.jaiku.model.Comment;
 import se.l4.jaiku.model.Presence;
+import se.l4.jaiku.model.User;
 
 import com.google.common.io.ByteStreams;
 import com.google.common.io.Closeables;
@@ -84,6 +86,12 @@ public class DiskStorage
 		try
 		{
 			gson.toJson(presence, writer);
+			
+			saveUser(presence.getUser());
+			for(Comment c : presence.getComments())
+			{
+				saveUser(c.getUser());
+			}
 		}
 		finally
 		{
@@ -131,4 +139,58 @@ public class DiskStorage
 			Closeables.closeQuietly(out);
 		}
 	}
+	
+	private File getUserPath(String username)
+	{
+		String u1 = username.length() > 2 ? username.substring(0, 2) : username;
+		
+		File root = new File(directory, "users");
+		File folder = new File(root, u1);
+		folder.mkdirs();
+		
+		File user = new File(folder, username + ".json");
+		
+		return user;
+	}
+	
+	@Override
+	public User getUser(String username)
+		throws IOException
+	{
+		File path = getUserPath(username);
+		if(path.exists())
+		{
+			FileReader reader = new FileReader(path);
+			try
+			{
+				return gson.fromJson(reader, User.class);
+			}
+			finally
+			{
+				Closeables.closeQuietly(reader);
+			}
+		}
+		return null;
+	}
+	
+	public void saveUser(User user)
+		throws IOException
+	{
+		File path = getUserPath(user.getNick());
+		if(path.exists())
+		{
+			return;
+		}
+		
+		FileWriter writer = new FileWriter(path);
+		try
+		{
+			gson.toJson(user, writer);
+		}
+		finally
+		{
+			Closeables.closeQuietly(writer);
+		}
+	}
+	
 }

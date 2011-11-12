@@ -11,6 +11,8 @@ import javax.ws.rs.core.Response;
 import org.joda.time.DateTime;
 
 import se.l4.dust.jaxrs.CacheResponses;
+import se.l4.jaiku.JaikuConstants;
+import se.l4.jaiku.model.User;
 import se.l4.jaiku.storage.Storage;
 
 import com.google.inject.Inject;
@@ -44,5 +46,10 @@ public class AvatarsPage
 			.entity(stream)
 			.type("image/jpeg")
 			.build();
+	}
+
+	public static String avatar(User user)
+	{
+		return "http://" + JaikuConstants.ARCHIVE_URL + "/avatar/" + user.getNick();
 	}
 }
