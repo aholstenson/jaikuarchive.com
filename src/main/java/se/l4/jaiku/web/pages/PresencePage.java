@@ -13,6 +13,7 @@ import org.joda.time.Interval;
 import org.joda.time.Period;
 
 import se.l4.dust.api.annotation.Template;
+import se.l4.dust.jaxrs.CacheResponses;
 import se.l4.jaiku.JaikuConstants;
 import se.l4.jaiku.TimeFormatting;
 import se.l4.jaiku.model.Comment;
@@ -56,7 +57,9 @@ public class PresencePage
 			return Response.status(404).build();
 		}
 		
-		return this;
+		return CacheResponses.longTermCacheResponse(presence.getCreatedAtDate().toDate())
+			.entity(this)
+			.build();
 	}
 
 	public Presence getPresence()
