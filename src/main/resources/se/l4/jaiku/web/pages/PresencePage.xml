@@ -4,7 +4,7 @@
 	<div class="stream">
 		<div class="presence">
 			<img src="${avatar(presence.user)}" class="avatar" width="50" height="50" />
-			<span class="said">${presence.user.nick} said:</span>
+			<span class="said"><a href="${user(presence.user)}">${presence.user.nick}</a> said:</span>
 			<span class="content">
 				${presence.title}
 			</span>
@@ -24,7 +24,7 @@
 						<span class="time" title="${comment.createdAtDate.toString('yyyy-MM-dd HH:mm')}">
 							${getRelativeTime(comment.createdAtDate)} ago
 						</span>
-						by ${comment.user.nick}
+						by <a href="${user(comment.user)}">${comment.user.nick}</a>
 					</div>
 				</div>
 			</d:loop>

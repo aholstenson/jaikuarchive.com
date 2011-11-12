@@ -18,9 +18,9 @@ public class TimeFormatting
 	public static final PeriodFormatter YEARS_AND_MONTHS = 
 		new PeriodFormatterBuilder()
 		.appendYears()
-		.appendSuffix(" years")
+		.appendSuffix(" year", " years")
 		.appendSeparator(", ")
 		.appendMonths()
-		.appendSuffix(" months")
+		.appendSuffix(" month", " months")
 		.toFormatter();
 }

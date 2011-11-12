@@ -55,6 +55,10 @@ body {
 	color: #ccc;
 }
 
+.comment .metadata {
+	color: #444;
+}
+
 .comment p {
 	margin-top: 0;
 	padding :0;

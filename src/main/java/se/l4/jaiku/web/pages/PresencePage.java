@@ -13,6 +13,7 @@ import org.joda.time.Interval;
 import org.joda.time.Period;
 
 import se.l4.dust.api.annotation.Template;
+import se.l4.jaiku.JaikuConstants;
 import se.l4.jaiku.TimeFormatting;
 import se.l4.jaiku.model.Comment;
 import se.l4.jaiku.model.Presence;
@@ -84,5 +85,10 @@ public class PresencePage
 	public String avatar(User user)
 	{
 		return AvatarsPage.avatar(user);
+	}
+	
+	public String user(User user)
+	{
+		return "http://" + user.getNick() + "." + JaikuConstants.ARCHIVE_URL;
 	}
 }
