@@ -17,11 +17,8 @@ import se.l4.jaiku.TimeFormatting;
 import se.l4.jaiku.model.Comment;
 import se.l4.jaiku.model.Presence;
 import se.l4.jaiku.model.User;
-import se.l4.jaiku.robot.JaikuAvatarFetcher;
-import se.l4.jaiku.robot.JaikuPresenceFetcher;
 import se.l4.jaiku.storage.Storage;
 
-import com.google.gson.Gson;
 import com.google.inject.Inject;
 
 /**
@@ -53,29 +50,6 @@ public class PresencePage
 		String username = host.substring(0, idx);
 		
 		presence = storage.getPresence(username, id);
-		if(presence == null)
-		{
-			try
-			{
-				presence = new JaikuPresenceFetcher(new Gson(), username, id)
-					.fetch();
-				
-				storage.savePresence(presence);
-				
-				JaikuAvatarFetcher avatars = new JaikuAvatarFetcher(storage);
-				avatars.fetchAvatar(presence.getUser());
-				
-				for(Comment c : presence.getComments())
-				{
-					avatars.fetchAvatar(c.getUser());
-				}
-			}
-			catch(IOException e)
-			{
-				// TODO: Request to Jaiku failed, what should we do?
-			}
-		}
-		
 		if(presence == null)
 		{
 			return Response.status(404).build();

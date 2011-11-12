@@ -11,7 +11,9 @@ import se.l4.crayon.annotation.Contribution;
 import se.l4.dust.api.NamespaceManager;
 import se.l4.dust.api.annotation.NamespaceBinding;
 import se.l4.dust.jaxrs.ServletBinder;
+import se.l4.jaiku.storage.CachingStorage;
 import se.l4.jaiku.storage.DiskStorage;
+import se.l4.jaiku.storage.FetchingStorage;
 import se.l4.jaiku.storage.Storage;
 
 import com.google.gson.Gson;
@@ -46,7 +48,7 @@ public class WebModule
 	
 	@Provides
 	@Singleton
-	public Storage provideStorage(Gson gson)
+	public DiskStorage provideDiskStorage(Gson gson)
 	{
 		File file = new File("/var/jaikuarchive");
 		if(! file.exists() || ! file.canWrite())
@@ -56,6 +58,20 @@ public class WebModule
 		}
 		
 		return new DiskStorage(file, gson);
+	}
+	
+	@Provides
+	@Singleton
+	public FetchingStorage provideFetchingStorage(Gson gson, DiskStorage storage)
+	{
+		return new FetchingStorage(gson, storage);
+	}
+	
+	@Provides
+	@Singleton
+	public Storage provideStorage(FetchingStorage storage)
+	{
+		return new CachingStorage(storage);
 	}
 	
 	@NamespaceBinding
