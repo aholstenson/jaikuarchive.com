@@ -32,11 +32,16 @@ public class UserPage
 		throws IOException
 	{
 		int idx = host.indexOf('.');
-		String username = host.substring(0, idx);
+		if(idx == -1)
+		{
+			// No dots, use index page
+			return new IndexPage();
+		}
 		
+		String username = host.substring(0, idx);
 		if(username.equals("www") || username.equals(JaikuConstants.ARCHIVE_URL_NO_COM))
 		{
-			// TODO: Main site
+			return new IndexPage();
 		}
 		
 		user = storage.getUser(username);

@@ -1,0 +1,31 @@
+<ja:layout xmlns:ja="jaikuarchive" xmlns:d="dust:common"
+	title="Jaiku Presence archiver">
+	
+	<div class="stream">
+		<h1>Jaiku Presence archiver</h1>
+		
+		
+		<p>On the topic of <a href="http://jaiku.com">Jaiku</a>, <a href="http://en.wikipedia.org/wiki/Jaiku">Wikipedia</a> says:</p>
+
+		<blockquote><p>Jaiku [was] a social networking, micro-blogging and lifestreaming service comparable to Twitter. Jaiku was founded in February 2006 by Jyri Engeström and Petteri Koponen from Finland and launched in July of that year. It was purchased by Google on October 9, 2007.</p></blockquote>
+
+		<p>On October 14, 2011, <a href="http://googleblog.blogspot.com/2011/10/fall-sweep.html">Google announced they decided to shut down</a> the Jaiku services by January 15, 2012</p>
+
+		<p><em>Jaiku played a fundamental role to a lot of people. Many of us can testify to how the service was instrumental in shaping the growth end evolution of social media in it&#8217;s time – and it still holds some of the most remarkable discussions ever. Jaiku has changed peoples careers and lives, and it is still the cornerstone of a truly strong community, long after the service itself has been abandoned.<br />
+		</em></p>
+
+		<p>There is a time and a place for everything, and it&#8217;s hard to criticize Googles decision to shut down operations. Jaiku is deserted and empty these days. But the thousands and thousands of good conversations in the service &#8211; and the links to them &#8211; deserves to live on.</p>
+		
+		<p><strong>Thats why we lunched Jaikuarchive.com &#8211; the Jaiku Presence archiver. We aim to rescue the immeasurable values built up in the service, but only the stuff we still care about.</strong></p>
+		
+		<p>All you have to do to preserve your old content is to change the domain-part of the url from jaiku.com to jaikuarchive.com. The first time the new URL is hit we&#8217;ll download a copy of the thread from the jaiku servers and archive it for ever on our servers. The following hits will be served independently of the old servers.</p>
+		
+		<p><strong>Note: you&#8217;ll have to visit every thread you want to preserve before jan 15, 2012. Once Google shuts down jaikuarchive.com we can no longer access any more content.</strong></p>
+		
+		<p class="large">
+			Need more detailed instructions? 
+			<a href="http://jardenberg.se/jaikuarchive/">We've got you covered</a>.
+		</p>
+	</div>
+	
+</ja:layout>

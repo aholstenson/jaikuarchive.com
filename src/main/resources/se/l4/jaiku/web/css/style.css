@@ -70,3 +70,7 @@ body {
 	padding :0;
 	margin-bottom: 1em;
 }
+
+.large {
+	font-size: 1.4em;
+}
