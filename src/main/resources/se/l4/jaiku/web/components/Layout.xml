@@ -7,7 +7,11 @@
 <body>
 	<d:body />
 
-	<div id="footer">
+	<div id="footer" class="small">
+		<p>
+			Read more about <a href="http://jaikuarchive.com">Jaikuarchive</a>.
+		</p>
+		
 		<a title="Real Time Web Analytics" href="http://getclicky.com/99610"><img alt="Real Time Web Analytics" src="//static.getclicky.com/media/links/badge.gif" border="0" /></a>
 		<script type="text/javascript">
 		var clicky_site_ids = clicky_site_ids || [];

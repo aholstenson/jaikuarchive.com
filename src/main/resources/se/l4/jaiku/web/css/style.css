@@ -74,3 +74,7 @@ body {
 .large {
 	font-size: 1.4em;
 }
+
+.small {
+	font-size: 0.8em;
+}

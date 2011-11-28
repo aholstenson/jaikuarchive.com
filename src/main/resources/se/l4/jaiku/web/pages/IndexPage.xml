@@ -16,15 +16,22 @@
 
 		<p>There is a time and a place for everything, and it&#8217;s hard to criticize Googles decision to shut down operations. Jaiku is deserted and empty these days. But the thousands and thousands of good conversations in the service &#8211; and the links to them &#8211; deserves to live on.</p>
 		
-		<p><strong>Thats why we lunched Jaikuarchive.com &#8211; the Jaiku Presence archiver. We aim to rescue the immeasurable values built up in the service, but only the stuff we still care about.</strong></p>
+		<p><strong>Thats why we launched Jaikuarchive.com &#8211; the Jaiku Presence archiver. We aim to rescue the immeasurable values built up in the service, but only the stuff we still care about.</strong></p>
 		
 		<p>All you have to do to preserve your old content is to change the domain-part of the url from jaiku.com to jaikuarchive.com. The first time the new URL is hit we&#8217;ll download a copy of the thread from the jaiku servers and archive it for ever on our servers. The following hits will be served independently of the old servers.</p>
 		
-		<p><strong>Note: you&#8217;ll have to visit every thread you want to preserve before jan 15, 2012. Once Google shuts down jaikuarchive.com we can no longer access any more content.</strong></p>
+		<p><strong>Note: you&#8217;ll have to visit every thread you want to preserve before jan 15, 2012. Once Google shuts down jaiku.com we can no longer access any more content.</strong></p>
 		
 		<p class="large">
 			Need more detailed instructions? 
 			<a href="http://jardenberg.se/jaikuarchive/">We've got you covered</a>.
+		</p>
+		
+		<p>
+			Jaikuarchive is provided by 
+			<a href="http://jardenberg.se/joakim">Joakim Jardenberg</a>, coded 
+			by <a href="http://holstenson.se">Andreas Holstenson</a> and hosted 
+			by <a href="http://www.citynetwork.se">City Network</a>.
 		</p>
 	</div>
 	
