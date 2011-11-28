@@ -11,6 +11,8 @@ import javax.ws.rs.core.Response;
 import org.joda.time.DateTime;
 import org.joda.time.Interval;
 import org.joda.time.Period;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import se.l4.dust.api.annotation.Template;
 import se.l4.dust.jaxrs.CacheResponses;
@@ -21,6 +23,7 @@ import se.l4.jaiku.model.Presence;
 import se.l4.jaiku.model.User;
 import se.l4.jaiku.storage.Storage;
 
+import com.google.gson.JsonParseException;
 import com.google.inject.Inject;
 
 /**
@@ -34,9 +37,15 @@ import com.google.inject.Inject;
 @Path("/presence/{id}")
 public class PresencePage
 {
+	private static final Logger logger = LoggerFactory.getLogger(PresencePage.class);
+	
 	private final Storage storage;
 	private Presence presence;
 	private Comment comment;
+
+	private boolean jsonFailure;
+
+	private boolean failure;
 
 	@Inject
 	public PresencePage(Storage storage)
@@ -51,15 +60,32 @@ public class PresencePage
 		int idx = host.indexOf('.');
 		String username = host.substring(0, idx);
 		
-		presence = storage.getPresence(username, id);
-		if(presence == null)
+		try
 		{
-			return Response.status(404).build();
+			presence = storage.getPresence(username, id);
+			if(presence == null)
+			{
+				return Response.status(404).build();
+			}
+			
+			return CacheResponses.longTermCacheResponse(presence.getCreatedAtDate().toDate())
+				.entity(this)
+				.build();
 		}
-		
-		return CacheResponses.longTermCacheResponse(presence.getCreatedAtDate().toDate())
-			.entity(this)
-			.build();
+		catch(JsonParseException e)
+		{
+			logger.error("Unable to parse JSON; " + e.getMessage(), e);
+			jsonFailure = true;
+			
+			return this;
+		}
+		catch(Exception e)
+		{
+			logger.error("Unable to parse JSON; " + e.getMessage(), e);
+			failure = true;
+			
+			return this;
+		}
 	}
 
 	public Presence getPresence()
@@ -93,5 +119,15 @@ public class PresencePage
 	public String user(User user)
 	{
 		return "http://" + user.getNick().toLowerCase() + "." + JaikuConstants.ARCHIVE_URL;
+	}
+	
+	public boolean isFailure()
+	{
+		return failure;
+	}
+	
+	public boolean isJsonFailure()
+	{
+		return jsonFailure;
 	}
 }

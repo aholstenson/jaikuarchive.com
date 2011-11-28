@@ -12,6 +12,7 @@ import com.google.common.base.Throwables;
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
+import com.google.common.util.concurrent.UncheckedExecutionException;
 
 /**
  * Storage that will cache data in memory.
@@ -56,6 +57,14 @@ public class CachingStorage
 		}
 		catch(ExecutionException e)
 		{
+			Throwables.propagateIfPossible(e.getCause());
+			Throwables.propagateIfInstanceOf(e.getCause(), IOException.class);
+			
+			throw new IOException("Unable to fetch presence; " + e.getMessage(), e.getCause());
+		}
+		catch(UncheckedExecutionException e)
+		{
+			Throwables.propagateIfPossible(e.getCause());
 			Throwables.propagateIfInstanceOf(e.getCause(), IOException.class);
 			
 			throw new IOException("Unable to fetch presence; " + e.getMessage(), e.getCause());
