@@ -26,7 +26,7 @@ public class Comment
 	
 	public String getId()
 	{
-		return id;
+		return comment_id;
 	}
 	
 	public String getTitle()
