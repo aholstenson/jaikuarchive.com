@@ -15,6 +15,7 @@ import se.l4.jaiku.model.User;
 import se.l4.jaiku.robot.JaikuAvatarFetcher;
 import se.l4.jaiku.robot.JaikuChannelFetcher;
 import se.l4.jaiku.robot.JaikuPresenceFetcher;
+import se.l4.jaiku.robot.TextUpdater;
 
 import com.google.gson.Gson;
 
@@ -61,6 +62,11 @@ public class FetchingStorage
 				for(Comment c : presence.getComments())
 				{
 					avatars.fetchAvatar(c.getUser());
+					
+					for(UserWithId ui : TextUpdater.getPresenceLinks(c.getPrettyContent()))
+					{
+						queue.queuePresence(ui.getUsername(), ui.getId());
+					}
 				}
 			}
 			catch(IOException e)
@@ -177,6 +183,11 @@ public class FetchingStorage
 				for(Comment c : presence.getComments())
 				{
 					avatars.fetchAvatar(c.getUser());
+					
+					for(UserWithId ui : TextUpdater.getPresenceLinks(c.getPrettyContent()))
+					{
+						queue.queuePresence(ui.getUsername(), ui.getId());
+					}
 				}
 			}
 			catch(IOException e)
