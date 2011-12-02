@@ -3,6 +3,8 @@
 <head>
 	<title>${title} | Jaiku Archive</title>
 	<link href="${asset:ja:css/style.css}" rel="stylesheet" type="text/css" />
+	
+	<d:body parameter="head" />
 </head>
 <body>
 	<d:body />

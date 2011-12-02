@@ -1,6 +1,14 @@
 <ja:layout xmlns:ja="jaikuarchive" xmlns:d="dust:common"
 	title="${(failure || jsonFailure) ? 'Oooops, something went wrong' : presence.title}">
 	
+	<d:parameter name="head">
+		<d:if test="${! (failure || jsonFailure)}">
+			<meta property="og:title" content="${presence.title}"/>
+	    	<meta property="og:url" content="${user(presence.user)}/presence/${presence.id}"/>
+	    	<meta property="og:image" content="${avatar(presence.user)}"/>
+		</d:if>
+	</d:parameter>
+	
 	<div class="stream">
 		<d:if test="${failure || jsonFailure}">
 			<h1>Ooops, something went wrong</h1>
