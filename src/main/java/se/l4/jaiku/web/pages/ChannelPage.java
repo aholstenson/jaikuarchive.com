@@ -2,10 +2,11 @@ package se.l4.jaiku.web.pages;
 
 import java.io.IOException;
 
+import javax.ws.rs.DefaultValue;
 import javax.ws.rs.GET;
-import javax.ws.rs.HeaderParam;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Response;
 
 import org.joda.time.DateTime;
@@ -17,58 +18,50 @@ import org.slf4j.LoggerFactory;
 import se.l4.dust.api.annotation.Template;
 import se.l4.jaiku.JaikuConstants;
 import se.l4.jaiku.TimeFormatting;
-import se.l4.jaiku.model.Comment;
-import se.l4.jaiku.model.Presence;
+import se.l4.jaiku.model.Channel;
+import se.l4.jaiku.model.ChannelStream;
+import se.l4.jaiku.model.ChannelStreamEntry;
 import se.l4.jaiku.model.User;
 import se.l4.jaiku.storage.Storage;
 
 import com.google.gson.JsonParseException;
 import com.google.inject.Inject;
 
-/**
- * Page that handles a Jaiku presence. This will attempt to fetch presences
- * on demand.
- * 
- * @author Andreas Holstenson
- *
- */
 @Template
-@Path("/presence/{id}")
-public class PresencePage
+@Path("/channel/{id}")
+public class ChannelPage
 {
-	private static final Logger logger = LoggerFactory.getLogger(PresencePage.class);
+	private static final Logger logger = LoggerFactory.getLogger(ChannelPage.class);
 	
 	private final Storage storage;
-	private Presence presence;
-	private Comment comment;
+	private ChannelStream stream;
+	private ChannelStreamEntry entry;
 
 	private boolean jsonFailure;
-
 	private boolean failure;
 
+	private String channel;
+
+	private int page;
+
 	@Inject
-	public PresencePage(Storage storage)
+	public ChannelPage(Storage storage)
 	{
 		this.storage = storage;
 	}
 	
-	public PresencePage(Storage storage, Presence presence)
-	{
-		this(storage);
-		this.presence = presence;
-	}
-	
 	@GET
-	public Object presence(@HeaderParam("Host") String host, @PathParam("id") String id)
+	public Object channel(@PathParam("id") String id, 
+			@QueryParam("page") @DefaultValue("1") int page)
 		throws IOException
 	{
-		int idx = host.indexOf('.');
-		String username = host.substring(0, idx);
+		this.channel = id;
+		this.page = page;
 		
 		try
 		{
-			presence = storage.getPresence(username, id);
-			if(presence == null)
+			stream = storage.getChannel(id, page);
+			if(stream == null)
 			{
 				return Response.status(404).build();
 			}
@@ -93,20 +86,30 @@ public class PresencePage
 			return this;
 		}
 	}
-
-	public Presence getPresence()
+	
+	public ChannelStream getStream()
 	{
-		return presence;
+		return stream;
 	}
 	
-	public Comment getComment()
+	public boolean isJsonFailure()
 	{
-		return comment;
+		return jsonFailure;
 	}
 	
-	public void setComment(Comment comment)
+	public boolean isFailure()
 	{
-		this.comment = comment;
+		return failure;
+	}
+	
+	public ChannelStreamEntry getEntry()
+	{
+		return entry;
+	}
+	
+	public void setEntry(ChannelStreamEntry entry)
+	{
+		this.entry = entry;
 	}
 	
 	public String getRelativeTime(DateTime dt)
@@ -117,23 +120,38 @@ public class PresencePage
 		return period.toString(TimeFormatting.YEARS_AND_MONTHS);
 	}
 	
+	public boolean hasPrevious()
+	{
+		return page > 1;
+	}
+	
+	public boolean hasNext()
+	{
+		return stream.isMorePages();
+	}
+	
+	public int getPage()
+	{
+		return page;
+	}
+	
+	public String getChannel()
+	{
+		return channel;
+	}
+	
 	public String avatar(User user)
 	{
 		return AvatarsPage.avatar(user);
 	}
 	
+	public String avatar(Channel channel)
+	{
+		return AvatarsPage.avatar(channel);
+	}
+	
 	public String user(User user)
 	{
 		return "http://" + user.getNick().toLowerCase() + "." + JaikuConstants.ARCHIVE_URL;
-	}
-	
-	public boolean isFailure()
-	{
-		return failure;
-	}
-	
-	public boolean isJsonFailure()
-	{
-		return jsonFailure;
 	}
 }

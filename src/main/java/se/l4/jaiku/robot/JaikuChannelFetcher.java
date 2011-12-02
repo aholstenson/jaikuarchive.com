@@ -1,10 +1,8 @@
 package se.l4.jaiku.robot;
 
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.OutputStream;
 import java.net.URL;
 
 import org.joda.time.DateTime;
@@ -39,7 +37,7 @@ public class JaikuChannelFetcher
 		this.callback = callback;
 	}
 	
-	public void fetch(OutputStream out)
+	public void fetch()
 		throws IOException
 	{
 		// Fetch the first item
@@ -124,20 +122,5 @@ public class JaikuChannelFetcher
 		{
 			stream.close();
 		}
-	}
-	
-	public static void main(String[] args)
-		throws Exception
-	{
-		FileOutputStream out = new FileOutputStream("channel.esc.json");
-		new JaikuChannelFetcher(new Gson(), "esc", new Callback()
-		{
-			@Override
-			public void save(ChannelStream stream, int number)
-			{
-				System.out.println("Request save of " + number + " containing " + stream.getStream().size() + " items");
-			}
-		})
-		.fetch(out);
 	}
 }

@@ -5,6 +5,7 @@ import java.io.InputStream;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 
+import se.l4.jaiku.model.ChannelStream;
 import se.l4.jaiku.model.Presence;
 import se.l4.jaiku.model.User;
 
@@ -104,6 +105,34 @@ public class CachingStorage
 		throws IOException
 	{
 		backend.saveUser(user);
+	}
+	
+	@Override
+	public ChannelStream getChannel(String channel, int page)
+		throws IOException
+	{
+		return backend.getChannel(channel, page);
+	}
+	
+	@Override
+	public void saveChannel(ChannelStream channel, int page)
+		throws IOException
+	{
+		backend.saveChannel(channel, page);
+	}
+	
+	@Override
+	public Presence getChannelPresence(String channel, String id)
+		throws IOException
+	{
+		return backend.getChannelPresence(channel, id);
+	}
+	
+	@Override
+	public void saveChannelPresence(String channel, Presence presence)
+		throws IOException
+	{
+		backend.saveChannelPresence(channel, presence);
 	}
 	
 	private static class UserWithId

@@ -3,6 +3,7 @@ package se.l4.jaiku.storage;
 import java.io.IOException;
 import java.io.InputStream;
 
+import se.l4.jaiku.model.ChannelStream;
 import se.l4.jaiku.model.Presence;
 import se.l4.jaiku.model.User;
 
@@ -77,5 +78,47 @@ public interface Storage
 	 * @throws IOException
 	 */
 	void saveUser(User user)
+		throws IOException;
+	
+	/**
+	 * Attempt to get the specified channel and page.
+	 * 
+	 * @param channel
+	 * @param page
+	 * @return
+	 * @throws IOException
+	 */
+	ChannelStream getChannel(String channel, int page)
+		throws IOException;
+	
+	/**
+	 * Save the channel.
+	 * 
+	 * @param channel
+	 * @param page
+	 * @throws IOException
+	 */
+	void saveChannel(ChannelStream channel, int page)
+		throws IOException;
+	
+	/**
+	 * Get presence associated with a channel.
+	 * 
+	 * @param channel
+	 * @param id
+	 * @return
+	 * @throws IOException
+	 */
+	Presence getChannelPresence(String channel, String id)
+		throws IOException;
+	
+	/**
+	 * Save presence for the specified channel.
+	 * 
+	 * @param presence
+	 * @param id
+	 * @throws IOException
+	 */
+	void saveChannelPresence(String channel, Presence presence)
 		throws IOException;
 }

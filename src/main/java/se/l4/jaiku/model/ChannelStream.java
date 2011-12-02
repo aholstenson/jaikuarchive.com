@@ -14,7 +14,7 @@ public class ChannelStream
 	private String title;
 	private String url;
 	
-	private Channel user;
+	private Channel channel;
 	
 	private List<ChannelStreamEntry> stream;
 	
@@ -35,9 +35,9 @@ public class ChannelStream
 		return url;
 	}
 	
-	public Channel getUser()
+	public Channel getChannel()
 	{
-		return user;
+		return channel;
 	}
 	
 	public List<ChannelStreamEntry> getStream()

@@ -8,6 +8,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 
+import se.l4.jaiku.model.ChannelStream;
 import se.l4.jaiku.model.Comment;
 import se.l4.jaiku.model.Presence;
 import se.l4.jaiku.model.User;
@@ -196,4 +197,132 @@ public class DiskStorage
 		}
 	}
 	
+	private File getChannelPath(String channel, int page)
+	{
+		channel = channel.toLowerCase();
+		if(channel.startsWith("#"))
+		{
+			channel = channel.substring(1);
+		}
+		String u1 = channel.length() > 2 ? channel.substring(0, 2) : channel;
+		
+		File root = new File(directory, "channels");
+		File folder = new File(root, u1);
+		folder = new File(folder, channel);
+		folder.mkdirs();
+		
+		File user = new File(folder, "page-" + page + ".json");
+		
+		return user;
+	}
+	
+	@Override
+	public ChannelStream getChannel(String channel, int page)
+		throws IOException
+	{
+		File path = getChannelPath(channel, page);
+		if(path.exists())
+		{
+			FileReader reader = new FileReader(path);
+			try
+			{
+				return gson.fromJson(reader, ChannelStream.class);
+			}
+			finally
+			{
+				Closeables.closeQuietly(reader);
+			}
+		}
+		return null;
+	}
+	
+	@Override
+	public void saveChannel(ChannelStream channel, int page)
+		throws IOException
+	{
+		File path = getChannelPath(channel.getChannel().getNick(), page);
+		if(path.exists())
+		{
+			return;
+		}
+		
+		FileWriter writer = new FileWriter(path);
+		try
+		{
+			gson.toJson(channel, writer);
+		}
+		finally
+		{
+			Closeables.closeQuietly(writer);
+		}
+	}
+	
+	private File getChannelPresencePath(String channel, String id)
+	{
+		channel = channel.toLowerCase();
+		if(channel.startsWith("#"))
+		{
+			channel = channel.substring(1);
+		}
+		String u1 = channel.length() > 2 ? channel.substring(0, 2) : channel;
+		
+		File root = new File(directory, "channels");
+		File folder = new File(root, u1);
+		folder = new File(folder, channel);
+		folder = new File(folder, "presences");
+		
+		String p1 = id.length() > 2 ? id.substring(0, 2) : id;
+		String p2 = id.length() > 4 ? id.substring(2, 4) : id;
+		folder = new File(
+			new File(folder, p1),
+			p2
+		);
+		
+		folder.mkdirs();
+		
+		File user = new File(folder, id + ".json");
+		
+		return user;
+	}
+	
+	@Override
+	public void saveChannelPresence(String channel, Presence presence)
+		throws IOException
+	{
+		File path = getChannelPresencePath(channel, presence.getId());
+		if(path.exists())
+		{
+			return;
+		}
+		
+		FileWriter writer = new FileWriter(path);
+		try
+		{
+			gson.toJson(presence, writer);
+		}
+		finally
+		{
+			Closeables.closeQuietly(writer);
+		}
+	}
+	
+	@Override
+	public Presence getChannelPresence(String channel, String id)
+		throws IOException
+	{
+		File path = getChannelPresencePath(channel, id);
+		if(path.exists())
+		{
+			FileReader reader = new FileReader(path);
+			try
+			{
+				return gson.fromJson(reader, Presence.class);
+			}
+			finally
+			{
+				Closeables.closeQuietly(reader);
+			}
+		}
+		return null;
+	}
 }

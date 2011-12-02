@@ -1,0 +1,62 @@
+<ja:layout xmlns:ja="jaikuarchive" xmlns:d="dust:common"
+	title="${(failure || jsonFailure) ? 'Oooops, something went wrong' : stream.title}">
+	
+	<d:parameter name="head">
+	</d:parameter>
+	
+	<div class="stream">
+		<d:if test="${failure || jsonFailure}">
+			<h1>Ooops, something went wrong</h1>
+			
+			<d:if test="${jsonFailure}">
+				<p>
+				We we're unable to fetch this channel from the Jaiku servers
+				</p>
+				
+				<p>
+				The channel might not exist.
+				</p>
+				
+				<d:parameter name="else">
+					Something went terribly wrong when the presence was being
+					fetched. Contact us and we'll look into it.
+				</d:parameter>
+			</d:if>
+			
+			<d:parameter name="else">
+				<div class="presence">
+					<img src="${avatar(stream.channel)}" class="avatar" width="50" height="50" />
+					<span class="content">
+						${stream.channel.nick}
+					</span>
+					<div class="metadata"></div>
+				</div>
+				<div class="comments">
+					<d:loop source="${stream.stream}" value="${entry}">
+						<div class="comment">
+							<img src="${avatar(entry.user)}" class="avatar" width="50" height="50" />
+							${entry.title}
+							
+							<div class="metadata">
+								<a href="/channel/${channel}/presence/${entry.id}">Permalink</a>
+								<span class="time" title="${entry.createdAtDate.toString('yyyy-MM-dd HH:mm')}">
+									${getRelativeTime(entry.createdAtDate)} ago
+								</span>
+								by <a href="${user(entry.user)}">${entry.user.nick}</a>
+							</div>
+						</div>
+					</d:loop>
+				</div>
+				<div class="pagination">
+					<d:if test="${hasPrevious()}">
+						<a href="?page=${page-1}">Previous</a>
+					</d:if>
+					
+					<d:if test="${hasNext()}">
+						<a href="?page=${page+1}">Next</a>
+					</d:if>
+				</div>
+			</d:parameter>
+		</d:if>
+	</div>
+</ja:layout>

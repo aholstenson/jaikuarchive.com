@@ -3,8 +3,6 @@ package se.l4.jaiku.robot;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
 import java.net.URL;
 
 import se.l4.jaiku.model.Comment;
@@ -23,38 +21,26 @@ public class JaikuPresenceFetcher
 {
 	private final Gson gson;
 	
-	private final String user;
-	private final String presence;
-
-	public JaikuPresenceFetcher(Gson gson, String user, String presence)
+	public JaikuPresenceFetcher(Gson gson)
 	{
 		this.gson = gson;
-		this.user = user;
-		this.presence = presence;
 	}
 	
-	/**
-	 * Fetch this presence and write it to the given stream.
-	 * 
-	 * @param out
-	 * @throws IOException
-	 */
-	public void fetch(OutputStream out)
+	public Presence fetchChannel(String channel, String id)
 		throws IOException
 	{
-		// Fetch the first item
-		Presence presence = fetch();
-		
-		OutputStreamWriter writer = new OutputStreamWriter(out);
-		gson.toJson(presence, writer);
-		writer.flush();
-		writer.close();
+		return fetch("http://jaiku.com/channel/" + channel + "/presence/" + id + "/json");
 	}
 	
-	public Presence fetch()
+	public Presence fetch(String user, String presence)
 		throws IOException
 	{
-		String uri = "http://" + user + ".jaiku.com/presence/" + presence + "/json";
+		return fetch("http://" + user + ".jaiku.com/presence/" + presence + "/json");
+	}
+	
+	public Presence fetch(String uri)
+		throws IOException
+	{
 		URL url = new URL(uri);
 		
 		InputStream stream = url.openStream();

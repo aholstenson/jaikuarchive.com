@@ -12,6 +12,7 @@ import org.joda.time.DateTime;
 
 import se.l4.dust.jaxrs.CacheResponses;
 import se.l4.jaiku.JaikuConstants;
+import se.l4.jaiku.model.Channel;
 import se.l4.jaiku.model.User;
 import se.l4.jaiku.storage.Storage;
 
@@ -51,5 +52,10 @@ public class AvatarsPage
 	public static String avatar(User user)
 	{
 		return "http://" + JaikuConstants.ARCHIVE_URL + "/avatar/" + user.getNick();
+	}
+	
+	public static String avatar(Channel channel)
+	{
+		return "http://" + JaikuConstants.ARCHIVE_URL + "/avatar/" + channel.getNick();
 	}
 }
