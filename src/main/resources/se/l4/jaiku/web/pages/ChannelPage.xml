@@ -1,7 +1,12 @@
 <ja:layout xmlns:ja="jaikuarchive" xmlns:d="dust:common"
-	title="${(failure || jsonFailure) ? 'Oooops, something went wrong' : stream.title}">
+	title="${(failure || jsonFailure) ? 'Oooops, something went wrong' : stream.channel.nick}">
 	
 	<d:parameter name="head">
+		<d:if test="${! (failure || jsonFailure)}">
+			<meta property="og:title" content="${stream.channel.nick}"/>
+	    	<meta property="og:url" content="${url()}"/>
+	    	<meta property="og:image" content="${avatar(stream.channel)}"/>
+		</d:if>
 	</d:parameter>
 	
 	<div class="stream">
@@ -29,7 +34,7 @@
 					<span class="content">
 						${stream.channel.nick}
 					</span>
-					<div class="metadata"></div>
+					<div class="metadata">&#160;</div>
 				</div>
 				<div class="comments">
 					<d:loop source="${stream.stream}" value="${entry}">

@@ -56,6 +56,6 @@ public class AvatarsPage
 	
 	public static String avatar(Channel channel)
 	{
-		return "http://" + JaikuConstants.ARCHIVE_URL + "/avatar/" + channel.getNick();
+		return "http://" + JaikuConstants.ARCHIVE_URL + "/avatar/" + channel.getNick().replace("#", "%23");
 	}
 }

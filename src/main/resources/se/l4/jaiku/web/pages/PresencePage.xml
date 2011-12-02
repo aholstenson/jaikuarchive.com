@@ -4,7 +4,13 @@
 	<d:parameter name="head">
 		<d:if test="${! (failure || jsonFailure)}">
 			<meta property="og:title" content="${presence.title}"/>
-	    	<meta property="og:url" content="${user(presence.user)}/presence/${presence.id}"/>
+			<d:if test="${url == null}">
+	    		<meta property="og:url" content="${user(presence.user)}/presence/${presence.id}"/>
+	    		
+	    		<d:parameter name="else">
+	    			<meta property="og:url" content="${url}"/>
+	    		</d:parameter>
+			</d:if>
 	    	<meta property="og:image" content="${avatar(presence.user)}"/>
 		</d:if>
 	</d:parameter>

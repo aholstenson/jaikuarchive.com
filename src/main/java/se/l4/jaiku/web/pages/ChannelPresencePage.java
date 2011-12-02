@@ -41,7 +41,7 @@ public class ChannelPresencePage
 				return Response.status(404).build();
 			}
 			
-			return new PresencePage(storage, presence);
+			return new PresencePage(storage, presence, ChannelPage.url(channel) + "/presence/" + id);
 		}
 		catch(JsonParseException e)
 		{

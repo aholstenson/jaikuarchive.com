@@ -41,10 +41,12 @@ public class PresencePage
 	private final Storage storage;
 	private Presence presence;
 	private Comment comment;
+	private String url;
 
 	private boolean jsonFailure;
 
 	private boolean failure;
+
 
 	@Inject
 	public PresencePage(Storage storage)
@@ -52,10 +54,11 @@ public class PresencePage
 		this.storage = storage;
 	}
 	
-	public PresencePage(Storage storage, Presence presence)
+	public PresencePage(Storage storage, Presence presence, String url)
 	{
 		this(storage);
 		this.presence = presence;
+		this.url = url;
 	}
 	
 	@GET
@@ -125,6 +128,11 @@ public class PresencePage
 	public String user(User user)
 	{
 		return "http://" + user.getNick().toLowerCase() + "." + JaikuConstants.ARCHIVE_URL;
+	}
+	
+	public String getUrl()
+	{
+		return url;
 	}
 	
 	public boolean isFailure()

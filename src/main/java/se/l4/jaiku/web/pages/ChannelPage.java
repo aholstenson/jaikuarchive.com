@@ -154,4 +154,14 @@ public class ChannelPage
 	{
 		return "http://" + user.getNick().toLowerCase() + "." + JaikuConstants.ARCHIVE_URL;
 	}
+	
+	public String url()
+	{
+		return url(channel);
+	}
+	
+	public static String url(String channel)
+	{
+		return "http://" + JaikuConstants.ARCHIVE_URL + "/channel/" + channel;
+	}
 }
