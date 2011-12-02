@@ -15,7 +15,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import se.l4.dust.api.annotation.Template;
-import se.l4.dust.jaxrs.CacheResponses;
 import se.l4.jaiku.JaikuConstants;
 import se.l4.jaiku.TimeFormatting;
 import se.l4.jaiku.model.Comment;
@@ -68,9 +67,10 @@ public class PresencePage
 				return Response.status(404).build();
 			}
 			
-			return CacheResponses.longTermCacheResponse(presence.getCreatedAtDate().toDate())
-				.entity(this)
-				.build();
+//			return CacheResponses.longTermCacheResponse(presence.getCreatedAtDate().toDate())
+//				.entity(this)
+//				.build();
+			return this;
 		}
 		catch(JsonParseException e)
 		{
