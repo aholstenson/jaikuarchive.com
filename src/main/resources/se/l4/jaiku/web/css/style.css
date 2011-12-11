@@ -87,3 +87,8 @@ body {
 .pagination a {
 	padding: 0 10px;
 }
+
+.goodbye {
+	clear: both;
+	padding-top: 20px;
+}

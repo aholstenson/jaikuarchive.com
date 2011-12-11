@@ -22,8 +22,82 @@ public class TextUpdater
 	private static final Pattern PRESENCE_PATTERN =
 		Pattern.compile("\"http://(.+?)\\." + JaikuConstants.ARCHIVE_URL + "/presence/(.+?)\"");
 	
+	private static final Pattern HTTP_PATTERN = Pattern.compile(
+		"(http|ftp|https):\\/\\/[\\w\\-_]+(\\.[\\w\\-_]+)+([\\w\\-\\.,@?^=%&amp;:/~\\+#]*[\\w\\-\\@?^=%&amp;/~\\+#])?"
+	);
+	
 	private TextUpdater()
 	{
+	}
+	
+	public static String hyperlink(String input)
+	{
+		Matcher matcher = HTTP_PATTERN.matcher(input);
+		
+		StringBuilder builder = new StringBuilder();
+		int start = 0;
+		while(matcher.find())
+		{
+			int end = matcher.start();
+			for(int i=start; i<end; i++)
+			{
+				escape(builder, input.charAt(i));
+			}
+			
+			builder.append("<a href=\"");
+			String href = matcher.group(0);
+			escape(builder, href);
+			builder.append("\" rel=\"nofollow\">");
+			escape(builder, href);
+			builder.append("</a>");
+			
+			start = matcher.end();
+		}
+		
+		for(int i=start, n=input.length(); i<n; i++)
+		{
+			escape(builder, input.charAt(i));
+		}
+		
+		return builder.toString();
+	}
+	
+	private static void escape(StringBuilder builder, String s)
+	{
+		for(int i=0, n=s.length(); i<n; i++) escape(builder, s.charAt(i));
+	}
+
+	private static void escape(StringBuilder builder, char c)
+	{
+		// TODO: Escaping of named characters
+		switch(c)
+		{
+			case '<':
+				builder.append("&lt;");
+				break;
+			case '>':
+				builder.append("&gt;");
+				break;
+			case '&':
+				builder.append("&amp;");
+				break;
+			default:
+				if(c > 0x7F)
+				{
+					escapeForce(builder, c);
+				}
+				else
+				{
+					builder.append(c);
+				}
+		}
+	}
+
+	private static void escapeForce(StringBuilder builder, char c)
+	{
+		builder.append("&#");
+		builder.append(Integer.toString(c, 10));
+		builder.append(';');
 	}
 	
 	public static String updateLinks(String input)

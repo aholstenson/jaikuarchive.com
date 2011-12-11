@@ -6,6 +6,12 @@
 			<img src="${avatar(user)}" class="avatar" width="50" height="50" />
 			<span class="said">${user.nick}</span>
 		</div>
+		
+		<d:if test="${user.goodbye != null}">
+			<p class="goodbye">
+				<d:raw value="${user.goodbye}" />
+			</p>
+		</d:if>
 	</div>
 	
 </ja:layout>

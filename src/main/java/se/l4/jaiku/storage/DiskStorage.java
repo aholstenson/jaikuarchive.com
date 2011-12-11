@@ -89,10 +89,10 @@ public class DiskStorage
 		{
 			gson.toJson(presence, writer);
 			
-			saveUser(presence.getUser());
+			saveUser(presence.getUser(), true);
 			for(Comment c : presence.getComments())
 			{
-				saveUser(c.getUser());
+				saveUser(c.getUser(), true);
 			}
 		}
 		finally
@@ -180,9 +180,16 @@ public class DiskStorage
 	public void saveUser(User user)
 		throws IOException
 	{
+		saveUser(user, false);
+	}
+	
+	public void saveUser(User user, boolean mustNotExist)
+		throws IOException
+	{
 		File path = getUserPath(user.getNick());
-		if(path.exists())
+		if(mustNotExist && path.exists())
 		{
+			System.out.println("Abort");
 			return;
 		}
 		
@@ -300,10 +307,10 @@ public class DiskStorage
 		{
 			gson.toJson(presence, writer);
 			
-			saveUser(presence.getUser());
+			saveUser(presence.getUser(), true);
 			for(Comment c : presence.getComments())
 			{
-				saveUser(c.getUser());
+				saveUser(c.getUser(), true);
 			}
 		}
 		finally

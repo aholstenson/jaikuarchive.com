@@ -47,6 +47,11 @@ public class UserStreamEntry
 		return created_at;
 	}
 	
+	public String getCommentId()
+	{
+		return comment_id;
+	}
+	
 	public DateTime getCreatedAtDate()
 	{
 		return formatter.parseDateTime(created_at);

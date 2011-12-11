@@ -11,6 +11,8 @@ public class User
 	private String full_nick;
 	private String url;
 	
+	private String goodbye;
+	
 	public User()
 	{
 	}
@@ -48,5 +50,15 @@ public class User
 	public String getUrl()
 	{
 		return url;
+	}
+	
+	public String getGoodbye()
+	{
+		return goodbye;
+	}
+	
+	public void setGoodbye(String goodbye)
+	{
+		this.goodbye = goodbye;
 	}
 }
