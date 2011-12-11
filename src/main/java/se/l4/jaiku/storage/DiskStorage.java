@@ -299,6 +299,12 @@ public class DiskStorage
 		try
 		{
 			gson.toJson(presence, writer);
+			
+			saveUser(presence.getUser());
+			for(Comment c : presence.getComments())
+			{
+				saveUser(c.getUser());
+			}
 		}
 		finally
 		{
