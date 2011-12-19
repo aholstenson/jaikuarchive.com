@@ -2,10 +2,12 @@ package se.l4.jaiku.storage;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import se.l4.jaiku.model.CachedPresence;
 import se.l4.jaiku.model.Channel;
 import se.l4.jaiku.model.ChannelStream;
 import se.l4.jaiku.model.ChannelStreamEntry;
@@ -205,5 +207,12 @@ public class FetchingStorage
 		throws IOException
 	{
 		backend.saveChannelPresence(channel, presence);
+	}
+	
+	@Override
+	public List<CachedPresence> getPresencesForUser(String user)
+		throws IOException
+	{
+		return backend.getPresencesForUser(user);
 	}
 }

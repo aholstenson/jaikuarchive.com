@@ -2,7 +2,9 @@ package se.l4.jaiku.storage;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.List;
 
+import se.l4.jaiku.model.CachedPresence;
 import se.l4.jaiku.model.ChannelStream;
 import se.l4.jaiku.model.Presence;
 import se.l4.jaiku.model.User;
@@ -120,5 +122,15 @@ public interface Storage
 	 * @throws IOException
 	 */
 	void saveChannelPresence(String channel, Presence presence)
+		throws IOException;
+	
+	/**
+	 * Get information about all presences for a specific user.
+	 * 
+	 * @param user
+	 * @return
+	 * @throws IOException
+	 */
+	List<CachedPresence> getPresencesForUser(String user)
 		throws IOException;
 }

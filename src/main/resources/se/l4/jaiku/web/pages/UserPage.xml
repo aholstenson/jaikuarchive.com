@@ -15,7 +15,7 @@
 			<d:parameter name="else">
 				<p style="clear: both; padding-top: 60px">
 					Is this you? You can make sure this page displays your
-					last goodbye to Jaiku and point people to your new home
+					last goodbye to Jaiku and points people to your new home
 					on the Internet.
 				</p>
 				
@@ -26,6 +26,39 @@
 						and 2.
 				</p>
 			</d:parameter>
+		</d:if>
+		
+		<d:if test="${! presences.empty}">
+			<h2>${totalPresences} archived ${totalPresences == 1 ? 'presence' : 'presences'}</h2>
+			
+			<d:loop source="${presences}" value="${presence}">
+				<div class="small-presence">
+					<span class="content">
+						${presence.title}
+					</span>
+					<div class="metadata">
+						<span class="comment-count">
+							<a href="/presence/${presence.id}">${presence.comments} comments</a>
+						</span>
+						
+						<span class="time" title="${presence.createdAt.toString('yyyy-MM-dd HH:mm')}">
+							Posted ${getRelativeTime(presence.createdAt)} ago
+						</span>
+						
+						<a href="/presence/${presence.id}">Permalink</a>
+					</div>
+				</div>
+			</d:loop>
+			
+			<div>
+				<d:if test="${hasPrevious}">
+					<a href="?page=${page-1}">Previous</a>
+				</d:if>
+				
+				<d:if test="${hasNext}">
+					<a href="?page=${page+1}">Next</a>
+				</d:if>
+			</div>
 		</d:if>
 	</div>
 	

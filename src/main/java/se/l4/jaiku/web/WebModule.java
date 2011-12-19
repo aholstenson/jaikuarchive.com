@@ -80,7 +80,7 @@ public class WebModule
 		manager.bind(NAMESPACE)
 			.setPrefix("jaiku")
 			.setPackageFromClass(getClass())
-			.setVersion("3") // XXX: Update if assets have changed
+			.setVersion("4") // XXX: Update if assets have changed
 			.add();
 	}
 	

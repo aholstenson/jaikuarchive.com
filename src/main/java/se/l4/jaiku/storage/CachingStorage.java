@@ -2,9 +2,11 @@ package se.l4.jaiku.storage;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 
+import se.l4.jaiku.model.CachedPresence;
 import se.l4.jaiku.model.ChannelStream;
 import se.l4.jaiku.model.Presence;
 import se.l4.jaiku.model.User;
@@ -26,8 +28,10 @@ public class CachingStorage
 {
 	private static final Presence EMPTY_PRESENCE = new Presence();
 	
-	private final Cache<UserWithId, Presence> presences;
 	private final Storage backend;
+	
+	private final Cache<UserWithId, Presence> presences;
+	private final Cache<String, List<CachedPresence>> presencesForUser;
 	
 	public CachingStorage(Storage backend0)
 	{
@@ -43,6 +47,20 @@ public class CachingStorage
 				{
 					Presence result = backend.getPresence(key.username, key.id);
 					return result == null ? EMPTY_PRESENCE : result;
+				}
+			});
+		
+		presencesForUser = CacheBuilder.newBuilder()
+			.softValues()
+			.maximumSize(10)
+			.expireAfterAccess(1, TimeUnit.HOURS)
+			.build(new CacheLoader<String, List<CachedPresence>>()
+			{
+				@Override
+				public List<CachedPresence> load(String key)
+					throws Exception
+				{
+					return backend.getPresencesForUser(key);
 				}
 			});
 	}
@@ -133,5 +151,29 @@ public class CachingStorage
 		throws IOException
 	{
 		backend.saveChannelPresence(channel, presence);
+	}
+	
+	@Override
+	public List<CachedPresence> getPresencesForUser(String user)
+		throws IOException
+	{
+		try
+		{
+			return presencesForUser.get(user);
+		}
+		catch(ExecutionException e)
+		{
+			Throwables.propagateIfPossible(e.getCause());
+			Throwables.propagateIfInstanceOf(e.getCause(), IOException.class);
+			
+			throw new IOException("Unable to fetch presences for " + user + "; " + e.getMessage(), e.getCause());
+		}
+		catch(UncheckedExecutionException e)
+		{
+			Throwables.propagateIfPossible(e.getCause());
+			Throwables.propagateIfInstanceOf(e.getCause(), IOException.class);
+			
+			throw new IOException("Unable to fetch presence for " + user + "; " + e.getMessage(), e.getCause());
+		}
 	}
 }

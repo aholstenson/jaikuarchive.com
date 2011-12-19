@@ -7,7 +7,11 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
+import se.l4.jaiku.model.CachedPresence;
 import se.l4.jaiku.model.ChannelStream;
 import se.l4.jaiku.model.Comment;
 import se.l4.jaiku.model.Presence;
@@ -37,16 +41,22 @@ public class DiskStorage
 		directory.mkdirs();
 	}
 	
-	private File getPresencePath(String username, String id)
+	private File getPresencePathForUser(String username)
 	{
 		username = username.toLowerCase();
 		String u1 = username.length() > 2 ? username.substring(0, 2) : username;
 		
+		File root = new File(directory, "presences");
+		return new File(new File(root, u1), username);
+	}
+	
+	private File getPresencePath(String username, String id)
+	{
+		File user = getPresencePathForUser(username);
+		
 		String p1 = id.length() > 2 ? id.substring(0, 2) : id;
 		String p2 = id.length() > 4 ? id.substring(2, 4) : id;
 		
-		File root = new File(directory, "presences");
-		File user = new File(new File(root, u1), username);
 		File folder = new File(
 			new File(user, p1),
 			p2
@@ -337,5 +347,49 @@ public class DiskStorage
 			}
 		}
 		return null;
+	}
+	
+	@Override
+	public List<CachedPresence> getPresencesForUser(String user)
+		throws IOException
+	{
+		File file = getPresencePathForUser(user);
+		if(! file.exists())
+		{
+			return Collections.emptyList();
+		}
+		
+		List<CachedPresence> result = new ArrayList<CachedPresence>();
+		
+		recurse(file, result);
+		
+		return result;
+	}
+	
+	private void recurse(File file, List<CachedPresence> result)
+		throws IOException
+	{
+		for(File f : file.listFiles())
+		{
+			if(f.isDirectory())
+			{
+				recurse(f, result);
+			}
+			else if(f.isFile() && f.getName().endsWith(".json"))
+			{
+				FileReader reader = new FileReader(f);
+				try
+				{
+					Presence p = gson.fromJson(reader, Presence.class);
+					result.add(
+						new CachedPresence(p.getId(), p.getTitle(), p.getCreatedAtDate(), p.getComments().size())
+					);
+				}
+				finally
+				{
+					Closeables.closeQuietly(reader);
+				}
+			}
+		}
 	}
 }

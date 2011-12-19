@@ -58,7 +58,11 @@ body {
 	margin-top: 10px;
 	
 	font-size: 0.9em;
-	color: #ccc;
+	color: #999;
+}
+
+.metadata span, .metadata a {
+	
 }
 
 .comment .metadata {
@@ -91,4 +95,9 @@ body {
 .goodbye {
 	clear: both;
 	padding-top: 20px;
+}
+
+.small-presence {
+	clear: both;
+	padding-bottom: 40px;
 }
