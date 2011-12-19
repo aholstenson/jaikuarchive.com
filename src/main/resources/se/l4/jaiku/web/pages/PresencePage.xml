@@ -59,6 +59,7 @@
 										${getRelativeTime(comment.createdAtDate)} ago
 									</span>
 									by <a href="${user(comment.user)}">${comment.user.nick}</a>
+									<a href="#c-${comment.id}" title="Permalink">#</a>
 								</div>
 							</div>
 						</d:loop>
