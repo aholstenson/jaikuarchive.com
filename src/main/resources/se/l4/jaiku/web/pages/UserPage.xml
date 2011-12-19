@@ -11,6 +11,21 @@
 			<p class="goodbye">
 				<d:raw value="${user.goodbye}" />
 			</p>
+			
+			<d:parameter name="else">
+				<p style="clear: both; padding-top: 60px">
+					Is this you? You can make sure this page displays your
+					last goodbye to Jaiku and point people to your new home
+					on the Internet.
+				</p>
+				
+				<p>
+					<b>Step 1:</b> Post a message on Jaiku containing <tt>#goodbye</tt><br/>
+					<b>Step 2:</b> Visit <a href="/goodbye" rel="nofollow">/goodbye</a> to import it<br/> 
+					<b>Step 3:</b> The message should now be displayed here. To update it repeat step 1
+						and 2.
+				</p>
+			</d:parameter>
 		</d:if>
 	</div>
 	
