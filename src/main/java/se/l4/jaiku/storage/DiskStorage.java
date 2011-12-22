@@ -199,7 +199,6 @@ public class DiskStorage
 		File path = getUserPath(user.getNick());
 		if(mustNotExist && path.exists())
 		{
-			System.out.println("Abort");
 			return;
 		}
 		
