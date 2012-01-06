@@ -3,6 +3,10 @@ package se.l4.jaiku.storage;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,20 +36,52 @@ public class FetchingStorage
 {
 	private static final Logger logger = LoggerFactory.getLogger(FetchingStorage.class);
 	
+	private final long timeout = TimeUnit.MILLISECONDS.convert(1, TimeUnit.MINUTES);
+	
 	private final Gson gson;
 	private final Storage backend;
-	private final FetchCache queue;
+	private final FetchQueue queue;
 
 	public FetchingStorage(Gson gson, Storage backend)
 	{
 		this.gson = gson;
 		this.backend = backend;
 		
-		queue = new FetchCache(this);
+		queue = new FetchQueue(this);
+	}
+	
+	@Override
+	public Presence getPresence(String username, String id) throws IOException
+	{
+		Presence presence = backend.getPresence(username, id);
+		if(presence != null)
+		{
+			return presence;
+		}
+		
+		Future<Presence> future = queue.queuePresence(username, id);
+		try
+		{
+			return future.get(timeout, TimeUnit.MILLISECONDS);
+		}
+		catch(InterruptedException e)
+		{
+			return null;
+		}
+		catch(ExecutionException e)
+		{
+			logger.warn("Unable to fetch via queue; " + e.getMessage(), e);
+			return null;
+		}
+		catch(TimeoutException e)
+		{
+			logger.warn("Time out, trying to cancel");
+			future.cancel(true);
+			return null;
+		}
 	}
 
-	@Override
-	public Presence getPresence(String username, String id)
+	public Presence fetchPresence(String username, String id)
 		throws IOException
 	{
 		Presence presence = backend.getPresence(username, id);
@@ -167,6 +203,37 @@ public class FetchingStorage
 	
 	@Override
 	public Presence getChannelPresence(String channel, String id)
+		throws IOException
+	{
+		Presence presence = backend.getChannelPresence(channel, id);
+		if(presence != null)
+		{
+			return presence;
+		}
+		
+		Future<Presence> future = queue.queueChannelPresence(channel, id);
+		try
+		{
+			return future.get(timeout, TimeUnit.MILLISECONDS);
+		}
+		catch(InterruptedException e)
+		{
+			return null;
+		}
+		catch(ExecutionException e)
+		{
+			logger.warn("Unable to fetch via queue; " + e.getMessage(), e);
+			return null;
+		}
+		catch(TimeoutException e)
+		{
+			logger.warn("Time out, trying to cancel");
+			future.cancel(true);
+			return null;
+		}
+	}
+	
+	public Presence fetchChannelPresence(String channel, String id)
 		throws IOException
 	{
 		Presence presence = backend.getChannelPresence(channel, id);

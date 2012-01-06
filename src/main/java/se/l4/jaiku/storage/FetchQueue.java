@@ -1,11 +1,15 @@
 package se.l4.jaiku.storage;
 
 import java.io.IOException;
+import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import se.l4.jaiku.model.Presence;
 
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
 
@@ -15,14 +19,14 @@ import com.google.common.util.concurrent.ThreadFactoryBuilder;
  * @author Andreas Holstenson
  *
  */
-public class FetchCache
+public class FetchQueue
 {
-	private static Logger logger = LoggerFactory.getLogger(FetchCache.class);
+	private static Logger logger = LoggerFactory.getLogger(FetchQueue.class);
 	
-	private final Storage storage;
+	private final FetchingStorage storage;
 	private ExecutorService executor;
 
-	public FetchCache(Storage storage)
+	public FetchQueue(FetchingStorage storage)
 	{
 		this.storage = storage;
 		executor = Executors.newFixedThreadPool(2, new ThreadFactoryBuilder()
@@ -32,39 +36,41 @@ public class FetchCache
 		);
 	}
 	
-	public void queuePresence(final String username, final String id)
+	public Future<Presence> queuePresence(final String username, final String id)
 	{
-		executor.submit(new Runnable()
+		return executor.submit(new Callable<Presence>()
 		{
 			@Override
-			public void run()
+			public Presence call()
 			{
 				try
 				{
-					storage.getPresence(username, id);
+					return storage.fetchPresence(username, id);
 				}
 				catch(IOException e)
 				{
 					logger.warn("Could not fetch " + username + " presence " + id, e);
+					return null;
 				}
 			}
 		});
 	}
 	
-	public void queueChannelPresence(final String channel, final String id)
+	public Future<Presence> queueChannelPresence(final String channel, final String id)
 	{
-		executor.submit(new Runnable()
+		return executor.submit(new Callable<Presence>()
 		{
 			@Override
-			public void run()
+			public Presence call()
 			{
 				try
 				{
-					storage.getChannelPresence(channel, id);
+					return storage.fetchChannelPresence(channel, id);
 				}
 				catch(IOException e)
 				{
-					logger.warn("Could not fetch " + channel + " presence " + id, e);
+					logger.warn("Could not fetch channel " + channel + " presence " + id, e);
+					return null;
 				}
 			}
 		});
