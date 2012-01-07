@@ -8,7 +8,8 @@ public class UserWithId
 	public UserWithId(String username, String id)
 	{
 		this.username = username;
-		this.id = id;
+		int idx = id.indexOf('#');
+		this.id = idx == -1 ? id : id.substring(0, idx);
 	}
 	
 	public String getUsername()

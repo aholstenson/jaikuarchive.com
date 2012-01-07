@@ -8,6 +8,7 @@ import se.l4.jaiku.model.CachedPresence;
 import se.l4.jaiku.model.ChannelStream;
 import se.l4.jaiku.model.Presence;
 import se.l4.jaiku.model.User;
+import se.l4.jaiku.model.UserStream;
 
 /**
  * Simple abstraction for the Jaiku storage.
@@ -132,5 +133,23 @@ public interface Storage
 	 * @throws IOException
 	 */
 	List<CachedPresence> getPresencesForUser(String user)
+		throws IOException;
+	
+	/**
+	 * Load the use stream for the specified user.
+	 * 
+	 * @param user
+	 * @return
+	 * @throws IOException
+	 */
+	UserStream getUserStream(String user)
+		throws IOException;
+
+	/**
+	 * Save a user stream.
+	 * 
+	 * @param user
+	 */
+	void saveUserStream(UserStream stream)
 		throws IOException;
 }

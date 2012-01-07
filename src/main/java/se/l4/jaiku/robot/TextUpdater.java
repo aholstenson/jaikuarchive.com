@@ -20,11 +20,14 @@ public class TextUpdater
 		Pattern.compile("http://(.+?)\\.(" + JaikuConstants.ORIGINAL_URL + ")");
 	
 	private static final Pattern PRESENCE_PATTERN =
-		Pattern.compile("\"http://(.+?)\\." + JaikuConstants.ARCHIVE_URL + "/presence/(.+?)\"");
+		Pattern.compile("\"http://([^\"]+?)\\." + JaikuConstants.ARCHIVE_URL + "/presence/([^\"]+?)\"");
 	
 	private static final Pattern HTTP_PATTERN = Pattern.compile(
 		"(http|ftp|https):\\/\\/[\\w\\-_]+(\\.[\\w\\-_]+)+([\\w\\-\\.,@?^=%&amp;:/~\\+#]*[\\w\\-\\@?^=%&amp;/~\\+#])?"
 	);
+	
+	private static final Pattern PRESENCE_MANUAL_PATTERN =
+		Pattern.compile("http://(.+)\\." + JaikuConstants.ORIGINAL_URL + "/presence/(.+)");
 	
 	private TextUpdater()
 	{
@@ -125,6 +128,20 @@ public class TextUpdater
 		}
 		
 		return result;
+	}
+	
+	public static UserWithId getPresenceFromUrl(String url)
+	{
+		Matcher matcher = PRESENCE_MANUAL_PATTERN.matcher(url);
+		if(matcher.find())
+		{
+			String username = matcher.group(1);
+			String id = matcher.group(2);
+			
+			return new UserWithId(username, id);
+		}
+		
+		return null;
 	}
 	
 	public static void main(String[] args)

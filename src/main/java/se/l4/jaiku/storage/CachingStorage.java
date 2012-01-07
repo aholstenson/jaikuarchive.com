@@ -10,6 +10,7 @@ import se.l4.jaiku.model.CachedPresence;
 import se.l4.jaiku.model.ChannelStream;
 import se.l4.jaiku.model.Presence;
 import se.l4.jaiku.model.User;
+import se.l4.jaiku.model.UserStream;
 
 import com.google.common.base.Throwables;
 import com.google.common.cache.Cache;
@@ -38,7 +39,7 @@ public class CachingStorage
 		this.backend = backend0;
 		presences = CacheBuilder.newBuilder()
 			.softValues()
-			.expireAfterAccess(1, TimeUnit.HOURS)
+			.expireAfterAccess(20, TimeUnit.MINUTES)
 			.build(new CacheLoader<UserWithId, Presence>()
 			{
 				@Override
@@ -53,7 +54,7 @@ public class CachingStorage
 		presencesForUser = CacheBuilder.newBuilder()
 			.softValues()
 			.maximumSize(10)
-			.expireAfterAccess(1, TimeUnit.HOURS)
+			.expireAfterAccess(60, TimeUnit.MINUTES)
 			.build(new CacheLoader<String, List<CachedPresence>>()
 			{
 				@Override
@@ -175,5 +176,19 @@ public class CachingStorage
 			
 			throw new IOException("Unable to fetch presence for " + user + "; " + e.getMessage(), e.getCause());
 		}
+	}
+	
+	@Override
+	public UserStream getUserStream(String user)
+		throws IOException
+	{
+		return backend.getUserStream(user);
+	}
+	
+	@Override
+	public void saveUserStream(UserStream stream)
+		throws IOException
+	{
+		backend.saveUserStream(stream);
 	}
 }

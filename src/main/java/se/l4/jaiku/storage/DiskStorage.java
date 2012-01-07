@@ -11,15 +11,20 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import se.l4.jaiku.model.CachedPresence;
 import se.l4.jaiku.model.ChannelStream;
 import se.l4.jaiku.model.Comment;
 import se.l4.jaiku.model.Presence;
 import se.l4.jaiku.model.User;
+import se.l4.jaiku.model.UserStream;
 
 import com.google.common.io.ByteStreams;
 import com.google.common.io.Closeables;
 import com.google.gson.Gson;
+import com.google.gson.JsonSyntaxException;
 
 /**
  * Disk based {@link Storage}.
@@ -30,6 +35,8 @@ import com.google.gson.Gson;
 public class DiskStorage
 	implements Storage
 {
+	private static final Logger logger = LoggerFactory.getLogger(DiskStorage.class);
+	
 	private final File directory;
 	private final Gson gson;
 
@@ -362,6 +369,8 @@ public class DiskStorage
 		
 		recurse(file, result);
 		
+		Collections.sort(result);
+		
 		return result;
 	}
 	
@@ -384,11 +393,64 @@ public class DiskStorage
 						new CachedPresence(p.getId(), p.getTitle(), p.getCreatedAtDate(), p.getComments().size())
 					);
 				}
+				catch(JsonSyntaxException e)
+				{
+					logger.warn("Unable to read " + f);
+				}
 				finally
 				{
 					Closeables.closeQuietly(reader);
 				}
 			}
+		}
+	}
+	
+	private File getUserStreamPath(String user)
+	{
+		user = user .toLowerCase();
+		String u1 = user.length() > 2 ? user.substring(0, 2) : user;
+		
+		File root = new File(directory, "userStreams");
+		File folder = new File(root, u1);
+		
+		folder.mkdirs();
+		
+		return new File(folder, user + ".json");
+	}
+	
+	@Override
+	public UserStream getUserStream(String user)
+		throws IOException
+	{
+		File path = getUserStreamPath(user);
+		
+		if(path.exists())
+		{
+			FileReader reader = new FileReader(path);
+			try
+			{
+				return gson.fromJson(reader, UserStream.class);
+			}
+			finally
+			{
+				Closeables.closeQuietly(reader);
+			}
+		}
+		return null;
+	}
+	
+	@Override
+	public void saveUserStream(UserStream stream) throws IOException
+	{
+		File path = getUserStreamPath(stream.getUser().getNick());
+		FileWriter writer = new FileWriter(path);
+		try
+		{
+			gson.toJson(stream, writer);
+		}
+		finally
+		{
+			Closeables.closeQuietly(writer);
 		}
 	}
 }

@@ -10,6 +10,7 @@ import org.joda.time.DateTime;
  *
  */
 public class CachedPresence
+	implements Comparable<CachedPresence>
 {
 	private final String id;
 	private final String title;
@@ -42,5 +43,11 @@ public class CachedPresence
 	public DateTime getCreatedAt()
 	{
 		return createdAt;
+	}
+	
+	@Override
+	public int compareTo(CachedPresence o)
+	{
+		return o.createdAt.compareTo(createdAt);
 	}
 }

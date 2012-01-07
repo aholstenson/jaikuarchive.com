@@ -77,7 +77,7 @@ public class UserPage
 			return Response.status(404).build();
 		}
 		
-		UserStream stream = new JaikuUserStream(new Gson(), username)
+		UserStream stream = new JaikuUserStream(new Gson(), username, null)
 			.fetch(null, 0);
 		
 		for(UserStreamEntry entry : stream.getStream())
@@ -156,6 +156,35 @@ public class UserPage
 		this.presences = presences;
 		
 		return this;
+	}
+	
+	@GET
+	@Path("/all")
+	public Object getAll(@HeaderParam("Host") String host)
+		throws IOException
+	{
+		int idx = host.indexOf('.');
+		if(idx == -1)
+		{
+			// No dots, use index page
+			return new IndexPage();
+		}
+		
+		String username = host.substring(0, idx);
+		if(username.equals("www") || username.equals(JaikuConstants.ARCHIVE_URL_NO_COM))
+		{
+			return new IndexPage();
+		}
+		
+		if(username.equalsIgnoreCase("jaiku"))
+		{
+			// Don't index the Jaiku user, it's full of spam
+			return Response.seeOther(URI.create("/")).build();
+		}
+		
+		storage.getUserStream(username.toLowerCase());
+		
+		return Response.seeOther(URI.create("/")).build();
 	}
 	
 	public User getUser()

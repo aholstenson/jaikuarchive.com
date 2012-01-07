@@ -18,9 +18,11 @@ import se.l4.jaiku.model.ChannelStreamEntry;
 import se.l4.jaiku.model.Comment;
 import se.l4.jaiku.model.Presence;
 import se.l4.jaiku.model.User;
+import se.l4.jaiku.model.UserStream;
 import se.l4.jaiku.robot.JaikuAvatarFetcher;
 import se.l4.jaiku.robot.JaikuChannelFetcher;
 import se.l4.jaiku.robot.JaikuPresenceFetcher;
+import se.l4.jaiku.robot.JaikuUserStream;
 import se.l4.jaiku.robot.TextUpdater;
 
 import com.google.gson.Gson;
@@ -87,6 +89,7 @@ public class FetchingStorage
 		Presence presence = backend.getPresence(username, id);
 		if(presence == null)
 		{
+			logger.info("Fetching presence: " + username + " with id " + id);
 			try
 			{
 				presence = new JaikuPresenceFetcher(gson)
@@ -239,6 +242,7 @@ public class FetchingStorage
 		Presence presence = backend.getChannelPresence(channel, id);
 		if(presence == null)
 		{
+			logger.info("Fetching channel presence: " + channel + " with id " + id);
 			try
 			{
 				presence = new JaikuPresenceFetcher(gson)
@@ -281,5 +285,71 @@ public class FetchingStorage
 		throws IOException
 	{
 		return backend.getPresencesForUser(user);
+	}
+	
+	@Override
+	public void saveUserStream(UserStream stream)
+		throws IOException
+	{
+		backend.saveUserStream(stream);
+	}
+	
+	@Override
+	public UserStream getUserStream(String user) throws IOException
+	{
+		UserStream stream = backend.getUserStream(user);
+		if(stream != null)
+		{
+			return stream;
+		}
+		
+		Future<UserStream> future = queue.queueUserStream(user);
+		return null;
+		/*
+		try
+		{
+			return future.get(timeout, TimeUnit.MILLISECONDS);
+		}
+		catch(InterruptedException e)
+		{
+			return null;
+		}
+		catch(ExecutionException e)
+		{
+			logger.warn("Unable to fetch via queue; " + e.getMessage(), e);
+			return null;
+		}
+		catch(TimeoutException e)
+		{
+			logger.warn("Time out, trying to cancel");
+			future.cancel(true);
+			return null;
+		}
+		*/
+	}
+	
+	public UserStream fetchUserStream(String user)
+		throws IOException
+	{
+		UserStream stream = backend.getUserStream(user);
+		if(stream == null)
+		{
+			logger.info("Fetching user stream: " + user);
+			
+			try
+			{
+				stream = new JaikuUserStream(gson, user, queue)
+					.fetch();
+				
+				backend.saveUserStream(stream);
+			}
+			catch(IOException e)
+			{
+				// TODO: Request to Jaiku failed, what should we do?
+				logger.warn("Unable to fetch user " + user, e);
+			}
+		}
+		
+		return stream;
 	}
 }
